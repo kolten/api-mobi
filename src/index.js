@@ -39,5 +39,9 @@ app.use(function(err, req, res, next) {
 if (process.env.NODE_ENV !== 'test') {
   app.use(logger('dev'));
 }
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+module.exports = app;
