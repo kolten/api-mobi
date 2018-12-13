@@ -11,11 +11,13 @@ const ENV = process.env.NODE_ENV;
 // App instance
 const app = express();
 
+const User = require('./models/User');
+
 // error handlers
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (ENV === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.json({
