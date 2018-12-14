@@ -11,8 +11,6 @@ const ENV = process.env.NODE_ENV;
 // App instance
 const app = express();
 
-const User = require('./models/User');
-
 // error handlers
 
 // development error handler
@@ -44,6 +42,6 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+app.listen(PORT, () => console.log(`env: ${ENV}, Listening on ${PORT}`));
 
 module.exports = app;
