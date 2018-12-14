@@ -11,8 +11,10 @@ const ENV = process.env.NODE_ENV;
 // App instance
 const app = express();
 
-// error handlers
+// Routes
+const routes = require('./routes');
 
+// error handlers
 // development error handler
 // will print stacktrace
 if (ENV === 'development') {
@@ -41,6 +43,8 @@ if (process.env.NODE_ENV !== 'test') {
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(routes);
 
 app.listen(PORT, () => console.log(`env: ${ENV}, Listening on ${PORT}`));
 
