@@ -13,25 +13,33 @@ module.exports.register = async (data) => {
   const user = omit(data, ["amount", "paid"])
 
   try {
-    const _u = await new User({
-      ...user,
-      password: hat(),
-      member: data.paid
-    }).save();
+    const _u = await User.byEmail(data.email)
+    if(!_u) {
+      const u = await new User({
+        ...user,
+        password: hat(),
+        member: data.paid
+      }).save();
+  
+      const _invoice = await new Invoice({
+        user_id: u.id,
+        paid: data.paid,
+        amount: data.amount
+      }).save();
+  
+      const _reset = await new Reset({
+        token: hat(),
+        user_id: u.id
+      }).save();
 
-    await new Invoice({
-      user_id: _u.id,
-      paid: data.paid,
-      amount: data.amount
-    }).save();
-
-    await new Reset({
-      token: hat(),
-      user_id: _u.id
-    }).save();
+      return { u, _invoice, _reset }
+    } 
+    else {
+      throw new Error("User exists")
+    }
   }
   catch (e) {
-    throw new Error({ error: e });
+    throw new Error({error: e})
   }
 }
 
@@ -48,7 +56,14 @@ router.post('/register', (req, res) => {
       })
     }
     else {
-      res.json(this.register(data))
+      const reg = this.register(data)
+
+      reg.then((result) => {
+        return res.status(200).send(result)
+      })
+      .catch((err) => {
+        return res.status(400).json({err})
+      })
     }
   })
 })
