@@ -1,6 +1,6 @@
 'use strict';
 
-const Bookshelf = require('../bookshelf');
+const {bookshelf} = require('../bookshelf');
 
 const Courses = Bookshelf.Model.extend({
   tableName: 'courses'

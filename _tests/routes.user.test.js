@@ -1,4 +1,3 @@
-require('dotenv').config();
 process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
@@ -8,13 +7,14 @@ chai.use(chaiHttp);
 const server = require('../src');
 const knex = require('../db/knex');
 
-const BASE_URL = `${process.env.VERSION}/users`
-
 const user = {
   first_name: "Kolten",
   last_name: "Sturgill",
   email: "koltensturgill@gmail.com",
-  student_id: "1001089599"
+  student_id: "1001089599",
+  shirt_size: "M",
+  paid: true,
+  amount: 1500
 }
 
 // Defining our test suite
@@ -23,42 +23,46 @@ describe('Routes: users', () => {
   beforeEach(() => {
     return knex.migrate.rollback()
       .then(() => knex.migrate.latest())
-      .then(() => knex.seed.run());
   })
 
   afterEach(() => {
     return knex.migrate.rollback();
   })
 
-  describe('POST /users', () => {
+  describe('POST /register', () => {
     test('Should create a user', async () => {
       const res = await chai
       .request(server)
-      .post(`${BASE_URL}`)
+      .post(`/v1/auth/register`)
       .send({
-        // We'll set a temp password, send an email with temp token
         ...user
       })
-
-      expect(res.status).toEqual(200);
+      .then((response) => {
+        expect(response.status).toEqual(200);
+      })
     })
   })
 
-  describe('GET /users/:id', () => {
-    test('Should create a user by id', async () => {
+  describe('POST /login', () => {
+    test('Check login for users', async () => {
       const res = await chai
       .request(server)
-      .get(`${BASE_URL}/1`)
-
-      expect(res.status).toEqual(200);
+      .post(`/v1/auth/login`)
+      .send({
+        email: user.email,
+        password: 'xyz123'
+      })
+      .then((response) => {
+        expect(response.status).toEqual(200);
+      })
     })
   })
 
-  describe('POST /users/reset-password', () => {
+  describe('POST /auth/reset-password', () => {
     test('Should update reset the users password if token has not expired', async () => {
       const res = await chai
       .request(server)
-      .post(`${BASE_URL}/reset-password`)
+      .post(`/v1/auth/reset-password`)
       // TODO: send token, user inputted password
       expect(res.status).toEqual(200);
     })

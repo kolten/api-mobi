@@ -12,10 +12,12 @@ exports.up = function(knex, Promise) {
     table.string('student_id', 10).notNullable();
     table.string('email', 50).notNullable();
     table.string('password').notNullable();
-    table.string('stripe_id');
+    // was going to use an enum, but knex complains too much
+    table.string('shirt_size').notNullable();
 
     table.boolean('is_admin').defaultTo('false');
     table.boolean('member').defaultTo('false');
+    table.boolean('recieved_shirt').defaultTo('false');
 
     table.timestamp('created_at').defaultTo(knex.fn.now());
     

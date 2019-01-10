@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 
@@ -37,6 +38,9 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Middleware
 if (process.env.NODE_ENV !== 'test') {
   app.use(logger('dev'));
@@ -44,7 +48,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(routes);
+app.use('/v1', routes);
 
 app.listen(PORT, () => console.log(`env: ${ENV}, Listening on ${PORT}`));
 

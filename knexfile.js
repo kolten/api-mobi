@@ -6,7 +6,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'mobi_api_dev',
-      user:     'postgres',
+      user:     'kolten',
       // password: 'password'
     },
     migrations: {

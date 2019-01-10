@@ -24,7 +24,7 @@ exports.seed = function(knex, Promise) {
   })
   .then(function(){
     return knex('invoices').insert([
-      {user_id: 1, is_cash: true}
+      {user_id: 1}
     ])
   })
 };
