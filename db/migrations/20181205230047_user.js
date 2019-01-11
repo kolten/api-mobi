@@ -18,6 +18,7 @@ exports.up = function(knex, Promise) {
     table.boolean('is_admin').defaultTo('false');
     table.boolean('member').defaultTo('false');
     table.boolean('recieved_shirt').defaultTo('false');
+    table.boolean('email_verified').defaultTo('false');
 
     table.timestamp('created_at').defaultTo(knex.fn.now());
     

@@ -11,12 +11,16 @@ const User = bookshelf.Model.extend({
     return this.hasMany('Resets');
   },
 
-  // invoices: function () {
-  //   return this.hasMany('Invoices');
-  // }
+  invoices: function () {
+    return this.hasMany('Invoices');
+  }
 }, {
-  byId: async id => User.query({where: {id: id}}).fetch(),
-  byEmail: async email => User.query({where: {email: email}}).fetch()
+  // byId: async id => User.query({where: {id: id}}).fetch(),
+  // byEmail: async email => User.query({where: { email: email }}).fetch()
+
+  byEmail: async function(email) {
+    User.query({where: { email: email }}).fetch()
+  }
 })
 
 module.exports = bookshelf.model('User', User);
