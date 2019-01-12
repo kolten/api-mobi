@@ -89,6 +89,7 @@ module.exports.checkPassword = async (password, user) => {
   }
 }
 
+// TODO: Count number of Resets to detect abuse in order to preserve mailgun emails
 module.exports.reset = async (data) => {
   try {
     const now = new Date();
@@ -99,10 +100,14 @@ module.exports.reset = async (data) => {
     // get the last reset from the query
     if(reset && reset[0]){
       const expires = new Date(reset[0].expires_at)
-      if(expires > now){
-        // get the user
-        const _user = await User.where({id: reset[0].user_id}).fetch();
+      // get the user
+      const _user = await User.where({id: reset[0].user_id}).fetch();
 
+      if(_user.get('email_verified')){
+        throw Error("You've already verified your account! Go to https://members.utamobi.com/login to login.");
+      }
+      
+      if(expires > now){
         // Create a hash of the password
         const hash = await bycrypt.hash(data.password, 10);
 
@@ -120,16 +125,16 @@ module.exports.reset = async (data) => {
           "first_name": _user.get('first_name'),
           "email": _user.get('email')
         }
-      }
-        console.log("Expired");
+      } else {
         // Issue new reset
         _newReset = await new Resets({
           token: hat(),
           user_id: reset[0].user_id
         }).save();
 
-        // await sendResetEmail(reset[0].user, _newReset);
-        throw Error("Token has expired.");
+        await sendResetEmail(reset[0].user, _newReset);
+        throw Error("Token has expired. Check your email for another token.");
+      }
     }
   } catch (error) {
     throw error;
