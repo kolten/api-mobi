@@ -1,7 +1,6 @@
 const mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_KEY, domain: process.env.MAILGUN_DOMAIN});
 
 module.exports.sendResetEmail = async (user, token) => {
-  console.log(user);
   if(process.env.NODE_ENV == "production"){
     try{
       this.sendEmail(
@@ -17,7 +16,6 @@ module.exports.sendResetEmail = async (user, token) => {
 
 // TODO: Fix this up with html
 module.exports.sendEmail = async (email, subject, text) => {
-  console.log(email, subject, text);
   const data = {
     from: 'uta.mobi@gmail.com',
     to: "koltensturgill92@gmail.com",
