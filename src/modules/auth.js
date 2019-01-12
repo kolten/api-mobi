@@ -58,21 +58,21 @@ module.exports.login = async (data) => {
     // Check if user has reset password from register
     if(_user.get('email_verified')){
       // Check incoming password versus hash w/ bcrypt
-      const token = await this.checkPassword(data.password, _u);
+      const token = await this.checkPassword(data.password, _user);
 
       if(token) {
         return {
           "Authorization": token,
-          "first_name": _u.get('first_name'),
-          "email": _u.get('email')
+          "first_name": _user.get('first_name'),
+          "email": _user.get('email')
         }
-      }
+      } 
       throw Error("Invalid email or password. Try again.");
     }
     throw Error("Check your email for a verification email!");
   }
   catch(err) {
-    throw err.message;
+    throw err
   }
 }
 
@@ -101,7 +101,7 @@ module.exports.reset = async (data) => {
       const expires = new Date(reset[0].expires_at)
       if(expires > now){
         // get the user
-        const _user = await User.byId(reset[0].user_id);
+        const _user = await User.where({id: reset[0].user_id}).fetch();
 
         // Create a hash of the password
         const hash = await bycrypt.hash(data.password, 10);
@@ -121,19 +121,18 @@ module.exports.reset = async (data) => {
           "email": _user.get('email')
         }
       }
-      else{
+        console.log("Expired");
         // Issue new reset
         _newReset = await new Resets({
           token: hat(),
-          user_id: reset[0].user.id
+          user_id: reset[0].user_id
         }).save();
 
-        await sendResetEmail(reset[0].user, _newReset);
-        throw new Error("Token has expired.");
-      }
+        // await sendResetEmail(reset[0].user, _newReset);
+        throw Error("Token has expired.");
     }
   } catch (error) {
-    throw error.messsage;
+    throw error;
   }
 }
 
@@ -178,7 +177,8 @@ router.post('/login', (req, res, next) => {
           return res.status(400).send(result)
         }
       }).catch((err) => {
-        next(res.json({error: err}))
+        console.log(err);
+        next(res.status(400).json({error: err}))
       });
     }
   })
@@ -199,7 +199,7 @@ router.post('/reset', (req, res, next) => {
       reset.then((result) => {
         return res.json(result)
       }).catch((err) => {
-        next(err)
+        next(res.status(400).json({error: err.message}))
       });
     }
   })

@@ -53,7 +53,7 @@ describe('Routes: users', () => {
         password: 'xyz123'
       })
       .then((response) => {
-        expect(response.status).toEqual(200);
+        expect(response.status).toEqual(400);
       })
     })
   })
@@ -64,7 +64,7 @@ describe('Routes: users', () => {
       .request(server)
       .post(`/v1/auth/reset`)
       // TODO: send token, user inputted password
-      expect(res.status).toEqual(200);
+      expect(res.status).toEqual(400);
     })
   })
 
