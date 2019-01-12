@@ -6,6 +6,8 @@ const {omit} = require('lodash');
 const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const { verifyAdminTokenMiddleware } = require('../utils/jwt');
+
 const { sendResetEmail } = require('../services/mailgun');
 
 const User = require('../models/User')
@@ -81,7 +83,7 @@ module.exports.checkPassword = async (password, user) => {
   if(match) {
     return jwt.sign({
       exp: Math.floor(Date.now() / 1000) + (60 * 60),
-      user: user.get('id')
+      user: {id: user.get('id')}
     }, 'secret')
   } 
   else {
@@ -117,7 +119,7 @@ module.exports.reset = async (data) => {
         // return JWT token
         const token = jwt.sign({
           exp: Math.floor(Date.now() / 1000) + (60 * 60),
-          user: _user.get('id')
+          user: {id: _user.get('id')}
         }, 'secret');
 
         return {
@@ -141,7 +143,7 @@ module.exports.reset = async (data) => {
   }
 }
 
-router.post('/register', (req, res, next) => {
+router.post('/register', verifyAdminTokenMiddleware, (req, res, next) => {
   const { body } = req;
   Joi.validate(body, registerSchema, (err, data) => {
     if (err) {
@@ -157,7 +159,7 @@ router.post('/register', (req, res, next) => {
       })
       .catch((err) => {
         //return res.status(400).json({err})
-        next(res.json({error: err}))
+        next(res.status(400).json({error: err.message}))
       })
     }
   })
@@ -179,11 +181,10 @@ router.post('/login', (req, res, next) => {
           return res.status(200).json(result)
         }
         else {
-          return res.status(400).send(result)
+          return res.status(400).json(result)
         }
       }).catch((err) => {
-        console.log(err);
-        next(res.status(400).json({error: err}))
+        next(res.status(401).json({error: err.message}))
       });
     }
   })

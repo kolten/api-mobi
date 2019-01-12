@@ -1,7 +1,8 @@
 const router = require('express').Router();
 
 const {
-  auth
+  auth,
+  internal
 } = require('./modules')
 
 router.get('/', (req, res) => {
@@ -10,5 +11,6 @@ router.get('/', (req, res) => {
 
 
 router.use('/auth', auth);
+router.use('/admin', internal)
 
 module.exports = router;
