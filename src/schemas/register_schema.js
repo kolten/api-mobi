@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const register = Joi.object().keys({
-  email: Joi.string().email().required().lowercase(),
+  email: Joi.string().email().required().lowercase().trim(),
   first_name: Joi.string().required().max(100),
   last_name: Joi.string().required().max(100),
   student_id: Joi.string().required().length(10),

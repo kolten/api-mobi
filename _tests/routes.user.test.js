@@ -58,11 +58,11 @@ describe('Routes: users', () => {
     })
   })
 
-  describe('POST /auth/reset-password', () => {
+  describe('POST /auth/reset', () => {
     test('Should update reset the users password if token has not expired', async () => {
       const res = await chai
       .request(server)
-      .post(`/v1/auth/reset-password`)
+      .post(`/v1/auth/reset`)
       // TODO: send token, user inputted password
       expect(res.status).toEqual(200);
     })
