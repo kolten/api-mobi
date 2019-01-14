@@ -2,7 +2,7 @@
 
 const { bookshelf } = require('../bookshelf');
 
-const Articles = Bookshelf.Model.extend({
+const Articles = bookshelf.Model.extend({
   tableName: 'articles'
 })
 

@@ -84,7 +84,7 @@ module.exports.checkPassword = async (password, user) => {
     return jwt.sign({
       exp: Math.floor(Date.now() / 1000) + (60 * 60),
       user: {id: user.get('id')}
-    }, 'secret')
+    }, process.env.JWT_SECRET)
   } 
   else {
     return null
@@ -120,7 +120,7 @@ module.exports.reset = async (data) => {
         const token = jwt.sign({
           exp: Math.floor(Date.now() / 1000) + (60 * 60),
           user: {id: _user.get('id')}
-        }, 'secret');
+        }, process.env.JWT_SECRET);
 
         return {
           "Authorization": token,

@@ -4,7 +4,7 @@ const User = require('../models/User');
 // JWT Token verification
 module.exports.verifyToken = async (token) => {
   try {
-    return await jwt.verify(token, 'secret')
+    return await jwt.verify(token, process.env.JWT_SECRET)
   } catch (error) {
     throw error
   }
