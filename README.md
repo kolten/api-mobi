@@ -1,5 +1,5 @@
 # Mobi API
-Server for member registration, and monthly tutorials/online articles.
+Server for member registration and monthly tutorials/online articles.
 
 ## Getting started
 
