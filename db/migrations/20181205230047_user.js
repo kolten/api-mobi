@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
   promises.push(knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'))
 
   promises.push(knex.schema.createTable('users', function(table) {
-    table.increments('id').primary();
+    table.increments('id');
 
     table.string('first_name', 100).notNullable();
     table.string('last_name', 100).notNullable();
