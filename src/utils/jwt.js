@@ -44,7 +44,7 @@ module.exports.verifyAdminTokenMiddleware = (req, res, next) => {
       });
     }
   }).catch((err) => {
-    next(err)
+    next(res.status(500).json({error: err.message}))
   });
 }
 

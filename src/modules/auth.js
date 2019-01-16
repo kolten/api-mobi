@@ -138,7 +138,7 @@ module.exports.reset = async (data) => {
         throw Error("Token has expired. Check your email for another token.");
       }
     }
-    throw Error("No rest token associated with any user.");
+    throw Error("No reset token associated with any user.");
   } catch (error) {
     throw error;
   }
@@ -160,7 +160,6 @@ router.post('/register', verifyAdminTokenMiddleware, (req, res, next) => {
       })
       .catch((err) => {
         //return res.status(400).json({err})
-        console.log(err);
         next(res.status(500).json({error: err}))
       })
     }
