@@ -17,3 +17,17 @@ module.exports.getAllUsers = async (limit, offset) => {
     throw error.message
   }
 }
+
+module.exports.createArticle = async (data) => {
+  try{
+    const _article = await new Article({
+      ...data,
+      tags: JSON.stringify(data.tags)
+    }).save();
+
+    return _article
+  }
+  catch(error) {
+    throw error
+  }
+}

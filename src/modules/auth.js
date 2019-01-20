@@ -169,6 +169,8 @@ router.post('/register', verifyAdminTokenMiddleware, (req, res, next) => {
 router.post('/login', (req, res, next) => {
   const { body } = req;
 
+  console.log(body);
+
   Joi.validate(body, loginSchema, (err, data) => {
     if(err) {
       return res.status(400).send({

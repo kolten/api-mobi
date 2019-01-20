@@ -1,9 +1,14 @@
 const router = require('express').Router();
 const {
-  getAllUsers
+  getAllUsers,
+  createArticle
 } = require('./controllers.js');
 
 const { verifyAdminTokenMiddleware } = require('../../utils/jwt');
+
+const validate = require('../../utils/validate');
+
+const {articleSchema} = require('../../schemas');
 
 router.use(verifyAdminTokenMiddleware);
 
@@ -23,7 +28,21 @@ router.get('/users', (req, res, next) => {
 })
 
 router.post('/article', (req, res, next) => {
-  res.status(404).json({error: "Not implemented yet"});
+  // res.status(404).json({error: "Not implemented yet"});
+  const { body } = req;
+  const valid = validate(body, articleSchema)
+  valid.then((data) => {
+    const article = createArticle(data)
+    article.then((a) => {
+      return res.status(201).json(a);
+    })
+    .catch((err) => {
+      next(res.status(500).json({error: err.message}));
+    })
+  })
+  .catch((err) => {
+    next(res.status(400).json({error: err.message}))
+  })
 })
 
 router.put('/article', (req, res, next) => {
