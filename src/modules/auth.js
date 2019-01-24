@@ -6,7 +6,7 @@ const {omit} = require('lodash');
 const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { verifyAdminTokenMiddleware, verifyUser } = require('../utils/jwt');
+const { verifyAdminTokenMiddleware, getProfile } = require('../utils/jwt');
 
 const { sendResetEmail } = require('../services/mailgun');
 
@@ -218,7 +218,7 @@ router.post('/reset', (req, res, next) => {
   })
 })
 
-router.get('/', verifyUser, (req, res, next) => {
+router.get('/', getProfile, (req, res, next) => {
   return res
 })
 

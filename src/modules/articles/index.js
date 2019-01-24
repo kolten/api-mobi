@@ -3,7 +3,7 @@ const { verifyUser } = require('../../utils/jwt');
 
 
 router.get('/', verifyUser, (req, res, next) => {
-  return res.sendStatus(200);
+  return res.sendStatus(200)
 })
 
 module.exports = router;
