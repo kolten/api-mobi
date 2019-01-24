@@ -2,7 +2,8 @@ const router = require('express').Router();
 
 const {
   auth,
-  admin
+  admin,
+  articles
 } = require('./modules')
 
 router.get('/', (req, res) => {
@@ -11,6 +12,7 @@ router.get('/', (req, res) => {
 
 
 router.use('/auth', auth);
-router.use('/admin', admin)
+router.use('/admin', admin);
+router.use('/articles', articles);
 
 module.exports = router;

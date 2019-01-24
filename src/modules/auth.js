@@ -6,7 +6,7 @@ const {omit} = require('lodash');
 const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { verifyAdminTokenMiddleware } = require('../utils/jwt');
+const { verifyAdminTokenMiddleware, verifyUser } = require('../utils/jwt');
 
 const { sendResetEmail } = require('../services/mailgun');
 
@@ -66,7 +66,10 @@ module.exports.login = async (data) => {
         return {
           "Authorization": token,
           "first_name": _user.get('first_name'),
-          "email": _user.get('email')
+          "last_name": _user.get('last_name'),
+          "email": _user.get('email'),
+          "is_member": _user.get('member'),
+          "is_admin": _user.get('is_admin'),
         }
       } 
       throw Error("Invalid email or password. Try again.");
@@ -125,7 +128,10 @@ module.exports.reset = async (data) => {
         return {
           "Authorization": token,
           "first_name": _user.get('first_name'),
-          "email": _user.get('email')
+          "last_name": _user.get('last_name'),
+          "email": _user.get('email'),
+          "is_member": _user.get('member'),
+          "is_admin": _user.get('is_admin'),
         }
       } else {
         // Issue new reset
@@ -169,8 +175,6 @@ router.post('/register', verifyAdminTokenMiddleware, (req, res, next) => {
 router.post('/login', (req, res, next) => {
   const { body } = req;
 
-  console.log(body);
-
   Joi.validate(body, loginSchema, (err, data) => {
     if(err) {
       return res.status(400).send({
@@ -187,7 +191,7 @@ router.post('/login', (req, res, next) => {
           return res.status(400).json(result)
         }
       }).catch((err) => {
-        next(res.status(401).json({error: err.message}))
+        next(res.status(400).json({error: err.message}))
       });
     }
   })
@@ -212,6 +216,10 @@ router.post('/reset', (req, res, next) => {
       });
     }
   })
+})
+
+router.get('/', verifyUser, (req, res, next) => {
+  return res
 })
 
 module.exports = router;

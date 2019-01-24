@@ -7,6 +7,8 @@ const Invoices = require('./Invoices');
 const User = bookshelf.Model.extend({
   tableName: 'users',
 
+  hidden: ['password', 'id'],
+
   resets: function(){
     return this.hasMany(Resets);
   },
