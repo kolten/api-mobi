@@ -64,12 +64,14 @@ module.exports.login = async (data) => {
 
       if(token) {
         return {
-          "Authorization": token,
-          "first_name": _user.get('first_name'),
-          "last_name": _user.get('last_name'),
-          "email": _user.get('email'),
-          "is_member": _user.get('member'),
-          "is_admin": _user.get('is_admin'),
+          "data": {
+            "Authorization": token,
+            "first_name": _user.get('first_name'),
+            "last_name": _user.get('last_name'),
+            "email": _user.get('email'),
+            "is_member": _user.get('member'),
+            "is_admin": _user.get('is_admin')
+          }
         }
       } 
       throw Error("Invalid email or password. Try again.");
@@ -126,12 +128,14 @@ module.exports.reset = async (data) => {
         }, process.env.JWT_SECRET);
 
         return {
-          "Authorization": token,
-          "first_name": _user.get('first_name'),
-          "last_name": _user.get('last_name'),
-          "email": _user.get('email'),
-          "is_member": _user.get('member'),
-          "is_admin": _user.get('is_admin'),
+          "data": {
+            "Authorization": token,
+            "first_name": _user.get('first_name'),
+            "last_name": _user.get('last_name'),
+            "email": _user.get('email'),
+            "is_member": _user.get('member'),
+            "is_admin": _user.get('is_admin')
+          }
         }
       } else {
         // Issue new reset

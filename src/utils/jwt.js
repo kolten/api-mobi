@@ -53,13 +53,13 @@ module.exports.getProfile = (req, res, next) => {
     const { id } = result.user;
     const user = User.byId(id);
     user.then((_user) => {
-      next(res.json({
+      next(res.json({"data" : {
         "first_name": _user.get('first_name'),
         "last_name": _user.get('last_name'),
         "email": _user.get('email'),
         "is_member": _user.get('member'),
         "is_admin": _user.get('is_admin'),
-      }))
+      }}))
     })
   })
   .catch((err) => {
