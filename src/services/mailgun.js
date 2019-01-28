@@ -1,12 +1,12 @@
 const mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_KEY, domain: process.env.MAILGUN_DOMAIN});
 
 module.exports.sendResetEmail = async (user, token) => {
-  if(process.env.NODE_ENV == "production"){
+  if(process.env.NODE_ENV === "production"){
     try{
-      this.sendEmail(
+      return this.sendEmail(
         user.email, 
         `Password reset for ${user.email}`, 
-        `Visit members.utamobi.com/reset?token=${token} to reset your password. This message will expire in 30 minutes!`)
+        `Visit ${process.env.CLIENT_URL}/reset?token=${token} to reset your password. This message will expire in 30 minutes!`)
     }catch(err){
       throw err
     }
@@ -18,7 +18,7 @@ module.exports.sendResetEmail = async (user, token) => {
 module.exports.sendEmail = async (email, subject, text) => {
   const data = {
     from: 'uta.mobi@gmail.com',
-    to: "koltensturgill92@gmail.com",
+    to: email,
     subject: subject,
     text: text
   }

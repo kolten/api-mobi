@@ -44,6 +44,9 @@ module.exports.register = async (data) => {
       }).save();
       
       await sendResetEmail(user , _reset.get('token'))
+      return {"data" : `${_user.get('first_name')}'s account created, check email to reset password!`}
+    }else{
+      throw Error("User previously exists!");
     }
   }
   catch (e) {
@@ -166,7 +169,7 @@ router.post('/register', verifyAdminTokenMiddleware, (req, res, next) => {
       const reg = this.register(data)
 
       reg.then((result) => {
-        return res.status(200).send(result)
+        return res.status(201).json(result)
       })
       .catch((err) => {
         //return res.status(400).json({err})

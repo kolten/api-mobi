@@ -7,6 +7,7 @@ const register = Joi.object().keys({
   student_id: Joi.string().required().length(10),
   shirt_size: Joi.string().required().max(4),
   paid: Joi.bool().required(),
+  recieved_shirt: Joi.bool().required(),
   amount: Joi.number().required()
 })
 
